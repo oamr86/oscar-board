@@ -9,9 +9,14 @@ export const TaskListPresentation: React.FC<TaskListPresentationProps> = ({ task
   <ul>
     {tasks.map((task) => (
       <li key={task.id}>
-        <strong>{task.title}</strong>
-        {task.description && <p>{task.description}</p>}
-        <span>Status: {task.status}</span>
+        <strong>{task.titulo}</strong>
+        {task.descripcion && <p>{task.descripcion}</p>}
+        <span>Estado: {task.estado}</span>
+        <div style={{ fontSize: 12, color: '#888' }}>
+          <span>Creado: {task.fechaCreacion.toLocaleDateString()}</span>
+          <br />
+          <span>Actualizado: {task.fechaUltimaActualizacion.toLocaleDateString()}</span>
+        </div>
       </li>
     ))}
   </ul>

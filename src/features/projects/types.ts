@@ -1,7 +1,8 @@
 // Tipos para el feature de proyectos
-
 export interface Project {
-  id: string;
-  name: string;
-  description?: string;
+  id: number;
+  nombre: string;
+  descripcion: string;
+  cantidadTikets: string;
+  porcentajeProgreso: number;
 }

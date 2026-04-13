@@ -1,9 +1,10 @@
 // Tipos para el feature de tareas
-
 export interface Task {
-  id: string;
-  title: string;
-  description?: string;
-  status: 'todo' | 'in-progress' | 'done';
-  projectId?: string;
+  id: number;
+  titulo: string;
+  descripcion?: string;
+  estado: 'En progreso' | 'En revisión' | 'Completada';
+  IdProyecto?: number;
+  fechaCreacion: Date;
+  fechaUltimaActualizacion: Date;
 }

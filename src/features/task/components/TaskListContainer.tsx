@@ -2,14 +2,35 @@ import React from 'react';
 import { TaskListPresentation } from './TaskListPresentation';
 import type { Task } from '../types';
 
-// Aquí podría venir la lógica de obtención de tareas, por ahora es estática
+
+// Mock de tareas de ejemplo.
 const mockTasks: Task[] = [
-  { id: '1', title: 'Tarea 1', description: 'Descripción 1', status: 'todo' },
-  { id: '2', title: 'Tarea 2', status: 'in-progress' },
-  { id: '3', title: 'Tarea 3', description: 'Descripción 3', status: 'done' },
+  {
+    id: 1,
+    titulo: 'Tarea 1',
+    descripcion: 'Descripción 1',
+    estado: 'En progreso',
+    fechaCreacion: new Date(),
+    fechaUltimaActualizacion: new Date(),
+  },
+  {
+    id: 2,
+    titulo: 'Tarea 2',
+    estado: 'En revisión',
+    fechaCreacion: new Date(),
+    fechaUltimaActualizacion: new Date(),
+  },
+  {
+    id: 3,
+    titulo: 'Tarea 3',
+    descripcion: 'Descripción 3',
+    estado: 'Completada',
+    fechaCreacion: new Date(),
+    fechaUltimaActualizacion: new Date(),
+  },
 ];
 
 export const TaskListContainer: React.FC = () => {
-  // Aquí se podría conectar a Redux, hooks, etc.
+  // Pendiente conectar con Redux o algun hook para obtener las tareas reales.
   return <TaskListPresentation tasks={mockTasks} />;
 };
