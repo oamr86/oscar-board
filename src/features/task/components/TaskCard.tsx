@@ -1,35 +1,33 @@
 import React from 'react';
 import { Card } from '../../../shared/ui/molecules';
 import { Badge } from '../../../shared/ui/atoms';
-import type { Task } from '../types';
+import type { Task } from '../utils/mockData';
 
-// Obtiene el tipo Task desde el archivo de tipos del feature de tareas
 interface TaskCardProps {
   task: Task;
 }
 
-//Pintamos la tarjeta de la tarea usando el componente Card y Badge para el estado
 export const TaskCard: React.FC<TaskCardProps> = ({ task }) => (
   <Card>
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <span style={{ fontWeight: 'bold', fontSize: 18 }}>{task.titulo}</span>
+      <span style={{ fontWeight: 'bold', fontSize: 18 }}>{task.title}</span>
       <Badge
         color={
-          task.estado === 'Completada'
+          task.status === 'done'
             ? '#4caf50'
-            : task.estado === 'En progreso'
+            : task.status === 'in_progress'
             ? '#ff9800'
-            : '#2196f3'
+            : '#bdbdbd'
         }
       >
-        {task.estado}
+        {task.status}
       </Badge>
     </div>
-    {task.descripcion && <p style={{ margin: '8px 0' }}>{task.descripcion}</p>}
+    <div style={{ margin: '8px 0' }}>{task.description}</div>
+    <div style={{ fontSize: 13, color: '#555' }}>Prioridad: {task.priority}</div>
+    <div style={{ fontSize: 13, color: '#555' }}>Proyecto: {task.project}</div>
     <div style={{ fontSize: 12, color: '#888' }}>
-      <span>Creado: {task.fechaCreacion.toLocaleDateString()}</span>
-      <br />
-      <span>Actualizado: {task.fechaUltimaActualizacion.toLocaleDateString()}</span>
+      <span>Creado: {task.createdAt}</span>
     </div>
   </Card>
 );

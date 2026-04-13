@@ -1,36 +1,24 @@
 import React from 'react';
 import { TaskListPresentation } from './TaskListPresentation';
-import type { Task } from '../types';
-
-
-// Mock de tareas de ejemplo.
-const mockTasks: Task[] = [
-  {
-    id: 1,
-    titulo: 'Tarea 1',
-    descripcion: 'Descripción 1',
-    estado: 'En progreso',
-    fechaCreacion: new Date(),
-    fechaUltimaActualizacion: new Date(),
-  },
-  {
-    id: 2,
-    titulo: 'Tarea 2',
-    estado: 'En revisión',
-    fechaCreacion: new Date(),
-    fechaUltimaActualizacion: new Date(),
-  },
-  {
-    id: 3,
-    titulo: 'Tarea 3',
-    descripcion: 'Descripción 3',
-    estado: 'Completada',
-    fechaCreacion: new Date(),
-    fechaUltimaActualizacion: new Date(),
-  },
-];
+import { mockTasks, Task } from '../utils/mockData';
 
 export const TaskListContainer: React.FC = () => {
   // Pendiente conectar con Redux o algun hook para obtener las tareas reales.
-  return <TaskListPresentation tasks={mockTasks} />;
+  return (
+    <section
+      style={{
+        maxWidth: 600,
+        margin: '32px auto',
+        background: '#fff',
+        borderRadius: 12,
+        boxShadow: '0 2px 16px #0001',
+        padding: 24,
+      }}
+    >
+      <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 16, textAlign: 'center', color: '#1976d2' }}>
+        Lista de Tareas
+      </h2>
+      <TaskListPresentation tasks={mockTasks} />
+    </section>
+  );
 };

@@ -1,23 +1,16 @@
 import React from 'react';
-import type { Task } from '../types';
+
+import { TaskCard } from './TaskCard';
+import type { Task } from '../utils/mockData';
 
 interface TaskListPresentationProps {
   tasks: Task[];
 }
 
 export const TaskListPresentation: React.FC<TaskListPresentationProps> = ({ tasks }) => (
-  <ul>
-    {tasks.map((task) => (
-      <li key={task.id}>
-        <strong>{task.titulo}</strong>
-        {task.descripcion && <p>{task.descripcion}</p>}
-        <span>Estado: {task.estado}</span>
-        <div style={{ fontSize: 12, color: '#888' }}>
-          <span>Creado: {task.fechaCreacion.toLocaleDateString()}</span>
-          <br />
-          <span>Actualizado: {task.fechaUltimaActualizacion.toLocaleDateString()}</span>
-        </div>
-      </li>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    {tasks.map((task: Task) => (
+      <TaskCard key={task.id} task={task} />
     ))}
-  </ul>
+  </div>
 );
