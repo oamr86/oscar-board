@@ -14,7 +14,7 @@ export interface BadgeProps {
 }
 
 /**
- * Badge visual simple, sin lógica de dominio.
+ * Badge sencillo sin nada de lógica
  */
 export const Badge: React.FC<BadgeProps> = ({ children, color = '#eee' }) => (
   <span style={{ background: color, borderRadius: 8, padding: '2px 8px', fontSize: 12 }}>

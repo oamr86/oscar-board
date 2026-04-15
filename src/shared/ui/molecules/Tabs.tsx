@@ -21,13 +21,19 @@ export interface TabsProps {
   defaultTab: string;
   /** Elementos hijos: Header, Tab, Content */
   children: ReactNode;
+  /** Tab activo controlado externamente */
+  activeTab?: string;
+  /** Setter externo para el tab activo */
+  setActiveTab?: (id: string) => void;
 }
 
 /**
  * Componente compuesto Tabs. Provee contexto y renderiza los hijos.
  */
-export const Tabs: React.FC<TabsProps> = ({ defaultTab, children }) => {
-  const [activeTab, setActiveTab] = useState(defaultTab);
+export const Tabs: React.FC<TabsProps & { activeTab?: string; setActiveTab?: (id: string) => void }> = ({ defaultTab, children, activeTab: controlledActiveTab, setActiveTab: controlledSetActiveTab }) => {
+  const [internalActiveTab, setInternalActiveTab] = useState(defaultTab);
+  const activeTab = controlledActiveTab ?? internalActiveTab;
+  const setActiveTab = controlledSetActiveTab ?? setInternalActiveTab;
   return (
     <TabsContext.Provider value={{ activeTab, setActiveTab }}>
       <div>{children}</div>
@@ -47,7 +53,20 @@ export interface TabsHeaderProps {
  * Header de Tabs, agrupa los botones de tabulación.
  */
 const TabsHeader: React.FC<TabsHeaderProps> = ({ children }) => (
-  <div style={{ display: 'flex', gap: 8 }}>{children}</div>
+  <div
+    style={{
+      display: 'flex',
+      gap: 8,
+      border: '1px solid #1976d2',
+      borderRadius: 8,
+      padding: 4,
+      background: '#f5faff',
+      width: 'fit-content',
+      marginBottom: 0,
+    }}
+  >
+    {children}
+  </div>
 );
 
 /**
@@ -58,12 +77,13 @@ export interface TabProps {
   id: string;
   /** Contenido del tab (título) */
   children: ReactNode;
+  onClick?: () => void;
 }
 
 /**
  * Un Tab individual, cambia el tab activo al hacer click.
  */
-const Tab: React.FC<TabProps> = ({ id, children }) => {
+const Tab: React.FC<TabProps> = ({ id, children, onClick }) => {
   const ctx = useContext(TabsContext);
   if (!ctx) throw new Error('Tab must be used within Tabs');
   const { activeTab, setActiveTab } = ctx;
@@ -71,12 +91,18 @@ const Tab: React.FC<TabProps> = ({ id, children }) => {
     <button
       style={{
         padding: '8px 16px',
+        border: 'none',
         borderBottom: activeTab === id ? '2px solid #1976d2' : '2px solid transparent',
-        background: 'none',
+        borderRadius: 6,
+        background: activeTab === id ? '#e3f0fb' : 'none',
         cursor: 'pointer',
         fontWeight: activeTab === id ? 'bold' : 'normal',
+        transition: 'background 0.2s',
       }}
-      onClick={() => setActiveTab(id)}
+      onClick={() => {
+        setActiveTab(id);
+        if (onClick) onClick();
+      }}
     >
       {children}
     </button>
@@ -99,7 +125,7 @@ export interface TabsContentProps {
 const TabsContent: React.FC<TabsContentProps> = ({ id, children }) => {
   const ctx = useContext(TabsContext);
   if (!ctx) throw new Error('Tabs.Content must be used within Tabs');
-  return ctx.activeTab === id ? <div style={{ padding: 16 }}>{children}</div> : null;
+  return ctx.activeTab === id ? <div style={{ padding: '0', margin: 0 }}>{children}</div> : null;
 };
 
 

@@ -1,14 +1,14 @@
 
 export const TASK_STATUSES = {
-  TODO: "todo",
-  IN_PROGRESS: "in_progress",
-  DONE: "done",
+  TODO: "To do",
+  IN_PROGRESS: "In progress",
+  DONE: "Done",
 } as const;
 
 export const TASK_PRIORITIES = {
-  LOW: "low",
-  MEDIUM: "medium",
-  HIGH: "high",
+  LOW: "Low",
+  MEDIUM: "Medium",
+  HIGH: "High",
 } as const;
 
 // Tipos derivados de las constantes — así evitamos duplicar definiciones

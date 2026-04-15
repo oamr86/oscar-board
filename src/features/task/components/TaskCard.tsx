@@ -8,7 +8,7 @@ interface TaskCardProps {
 }
 
 export const TaskCard: React.FC<TaskCardProps> = ({ task }) => (
-  <Card>
+  <Card style={{ width: '80%' }}>
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       <span style={{ fontWeight: 'bold', fontSize: 18 }}>{task.title}</span>
       <Badge
