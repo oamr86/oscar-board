@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '../../../shared/ui/molecules';
 import { Badge } from '../../../shared/ui/atoms';
-import type { Task } from '../utils/mockData';
+import { Task, TASK_STATUSES } from '../utils/mockData';
 
 interface TaskCardProps {
   task: Task;
@@ -13,9 +13,9 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task }) => (
       <span style={{ fontWeight: 'bold', fontSize: 18 }}>{task.title}</span>
       <Badge
         color={
-          task.status === 'done'
+          task.status === TASK_STATUSES.DONE
             ? '#4caf50'
-            : task.status === 'in_progress'
+            : task.status === TASK_STATUSES.IN_PROGRESS
             ? '#ff9800'
             : '#bdbdbd'
         }
