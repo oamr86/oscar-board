@@ -1,12 +1,140 @@
+//OAMR -  'use client' es necesario porque este componente usa Suspense y simula carga asíncrona con throw new Promise, lo que requiere ejecución en el cliente.
+"use client";
 import React from 'react';
 import { TaskListPresentation } from './TaskListPresentation';
-import { mockTasks, Task } from '@/app/features/task/utils/mockData';
+import { TASK_STATUSES, TASK_PRIORITIES } from '@/app/features/task/utils/mockData';
+import { useForm } from '@/app/features/task/hooks';
+import { useTaskStore } from '@/app/features/task/store';
 
-export const TaskListContainer: React.FC = () => {
-  // Pendiente conectar con Redux o algun hook para obtener las tareas reales en entregable 2.
+const initialTasks = [
+  {
+    id: '1',
+    title: 'Diseñar wireframes',
+    description: 'Crear los wireframes del dashboard principal',
+    status: TASK_STATUSES.DONE,
+    priority: TASK_PRIORITIES.HIGH,
+    project: 'TaskFlow UI',
+    createdAt: '2026-04-01',
+  },
+  {
+    id: '2',
+    title: 'Configurar CI/CD',
+    description: 'Automatizar despliegues con GitHub Actions',
+    status: TASK_STATUSES.IN_PROGRESS,
+    priority: TASK_PRIORITIES.MEDIUM,
+    project: 'TaskFlow API',
+    createdAt: '2026-04-10',
+  },
+];
+
+
+const validate = (values: { title: string; description: string; project: string }) => {
+  const errors: Partial<{ title: string; description: string; project: string }> = {};
+  if (!values.title) errors.title = 'Requerido';
+  if (!values.description) errors.description = 'Requerido';
+  if (!values.project) errors.project = 'Requerido';
+  return errors;
+};
+
+const TaskListContainer: React.FC = () => {
+  const tasks = useTaskStore((state) => state.tasks);
+  const addTask = useTaskStore((state) => state.addTask);
+  const deleteTask = useTaskStore((state) => state.deleteTask);
+  const markComplete = useTaskStore((state) => state.markComplete);
+
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    setValues,
+    setErrors,
+    setTouched,
+  } = useForm({
+    initialValues: {
+      title: '',
+      description: '',
+      priority: TASK_PRIORITIES.MEDIUM,
+      project: '',
+    },
+    validate,
+    onSubmit: async (vals) => {
+      //OAMR - Optimistic update: actualiza la UI antes de la respuesta del servidor
+      const newTask = {
+        id: Date.now().toString(),
+        title: vals.title,
+        description: vals.description,
+        status: TASK_STATUSES.TODO,
+        priority: vals.priority,
+        project: vals.project,
+        createdAt: new Date().toISOString().slice(0, 10),
+      };
+      addTask(newTask);
+      setValues({
+        title: '',
+        description: '',
+        priority: TASK_PRIORITIES.MEDIUM,
+        project: '',
+      });
+      setTouched({});
+      setErrors({});
+      // Simula petición al servidor
+      try {
+        await new Promise((resolve, reject) => setTimeout(resolve, 1200));
+        // Si la petición falla, descomenta la siguiente línea para probar rollback:
+        // throw new Error('Error al guardar');
+      } catch (err) {
+        //OAMR - Rollback: elimina la tarea agregada si la petición falla
+        deleteTask(newTask.id);
+        alert('Error al guardar la tarea. Se revirtió el cambio.');
+      }
+    },
+  });
+
+
+
   return (
     <section>
-      <TaskListPresentation tasks={mockTasks} />
+      <form onSubmit={handleSubmit} style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 400 }}>
+        <input
+          name="title"
+          placeholder="Título"
+          value={values.title}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        {touched.title && errors.title && <span style={{ color: 'red', fontSize: 12 }}>{errors.title}</span>}
+        <input
+          name="description"
+          placeholder="Descripción"
+          value={values.description}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        {touched.description && errors.description && <span style={{ color: 'red', fontSize: 12 }}>{errors.description}</span>}
+        <input
+          name="project"
+          placeholder="Proyecto"
+          value={values.project}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        {touched.project && errors.project && <span style={{ color: 'red', fontSize: 12 }}>{errors.project}</span>}
+        <select name="priority" value={values.priority} onChange={handleChange}>
+          <option value={TASK_PRIORITIES.LOW}>Baja</option>
+          <option value={TASK_PRIORITIES.MEDIUM}>Media</option>
+          <option value={TASK_PRIORITIES.HIGH}>Alta</option>
+        </select>
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Agregando...' : 'Agregar tarea'}
+        </button>
+      </form>
+      <TaskListPresentation tasks={tasks} onRemove={deleteTask} onToggle={markComplete} />
     </section>
   );
 };
+
+export default TaskListContainer;

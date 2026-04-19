@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Card } from '@/app/shared/ui/molecules/Card';
 import { Project } from '@/app/features/projects/utils/mockData';
 

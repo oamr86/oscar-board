@@ -3,7 +3,7 @@ import React from "react";
 interface ArrowProps {
   onClick: () => void;
 }
-//Arrow para los cards de projects
+//OAMR - Arrow para los cards de projects
 export const Arrow: React.FC<ArrowProps> = ({ onClick }) => (
   <span
     onClick={onClick}

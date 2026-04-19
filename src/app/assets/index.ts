@@ -1,2 +1,2 @@
-// Archivo de barril para assets
+//OAMR -  Archivo de barril para assets
 export {};

@@ -1,7 +1,20 @@
-import React from "react";
+//OAMR -  'use client' es necesario porque este componente usa Suspense y simula carga asíncrona con throw new Promise, lo que requiere ejecución en el cliente.
+"use client";
+import React, { useEffect, useState } from "react";
 import { mockProjects } from '@/app/features/projects/utils/mockData';
 import { ProjectListPresentation } from "./ProjectListPresentation";
 
-export const ProjectListContainer: React.FC = () => {
+
+let resolved = false;
+const ProjectListContainer: React.FC = () => {
+  if (!resolved) {
+    throw new Promise(resolve => setTimeout(() => {
+      resolved = true;
+      resolve(true);
+    }, 2000));
+  }
   return <ProjectListPresentation projects={mockProjects} />;
 };
+
+export default ProjectListContainer;
+export { ProjectListContainer };

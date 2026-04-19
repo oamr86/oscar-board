@@ -1,13 +1,15 @@
-import React from 'react';
+
 
 import { TaskCard } from './TaskCard';
 import type { Task } from '@/app/features/task/utils/mockData';
 
 interface TaskListPresentationProps {
   tasks: Task[];
+  onRemove?: (id: string) => void;
+  onToggle?: (id: string) => void;
 }
 
-export const TaskListPresentation: React.FC<TaskListPresentationProps> = ({ tasks }) => (
+export const TaskListPresentation: React.FC<TaskListPresentationProps> = ({ tasks, onRemove, onToggle }) => (
   <div style={{
     display: 'flex',
     flexDirection: 'column',
@@ -20,9 +22,8 @@ export const TaskListPresentation: React.FC<TaskListPresentationProps> = ({ task
     background: '#f5faff',
     boxSizing: 'border-box',
   }}>
-    
     {tasks.map((task: Task) => (
-      <TaskCard key={task.id} task={task} />
+      <TaskCard key={task.id} task={task} onRemove={onRemove} onToggle={onToggle} />
     ))}
   </div>
 );

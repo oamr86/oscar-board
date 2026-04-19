@@ -1,4 +1,5 @@
 
+//OAMR -  'use client' permite que este archivo use APIs de React exclusivas de componentes cliente (como createContext y useState).
 "use client";
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
@@ -132,7 +133,7 @@ const TabsContent: React.FC<TabsContentProps> = ({ id, children }) => {
 
 
 
-// Definir tipo compuesto para Tabs con subcomponentes
+//OAMR -  Definir tipo compuesto para Tabs con subcomponentes
 interface TabsCompoundComponent extends React.FC<TabsProps> {
   Header: React.FC<TabsHeaderProps>;
   Tab: React.FC<TabProps>;

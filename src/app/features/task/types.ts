@@ -1,4 +1,4 @@
-// Tipos para el feature de tareas
+//OAMR -  Tipos para el feature de tareas
 export interface Task {
   id: number;
   titulo: string;

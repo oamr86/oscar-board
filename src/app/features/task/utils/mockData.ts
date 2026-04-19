@@ -11,7 +11,7 @@ export const TASK_PRIORITIES = {
   HIGH: "High",
 } as const;
 
-// Tipos derivados de las constantes — así evitamos duplicar definiciones
+//OAMR -  Tipos derivados de las constantes — así evitamos duplicar definiciones
 export type TaskStatus = (typeof TASK_STATUSES)[keyof typeof TASK_STATUSES];
 export type TaskPriority =
   (typeof TASK_PRIORITIES)[keyof typeof TASK_PRIORITIES];

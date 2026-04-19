@@ -1,4 +1,4 @@
-// Tipos para el feature de proyectos
+//OAMR -  Tipos para el feature de proyectos
 export interface Project {
   id: number;
   nombre: string;

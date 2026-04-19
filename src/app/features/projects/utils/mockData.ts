@@ -1,5 +1,5 @@
-// mockData de proyectos para el DevBoard
-// #sym:project
+//OAMR -  mockData de proyectos para el DevBoard
+//OAMR -  #sym:project
 
 export interface Project {
   id: string;
