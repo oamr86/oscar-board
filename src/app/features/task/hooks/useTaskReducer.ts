@@ -1,5 +1,5 @@
 import { useReducer } from 'react';
-import { Task } from '@/app/features/task/utils/mockData';
+import { Task } from '@/data/mockTasks';
 
 export type TaskState = {
   tasks: Task[];

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from '@/app/shared/ui/atoms';
+import { Input } from '@/app/components/atoms/Input';
 
 
 /**

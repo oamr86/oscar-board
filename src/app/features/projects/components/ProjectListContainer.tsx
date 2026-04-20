@@ -1,7 +1,7 @@
 //OAMR -  'use client' es necesario porque este componente usa Suspense y simula carga asíncrona con throw new Promise, lo que requiere ejecución en el cliente.
 "use client";
 import React, { useEffect, useState } from "react";
-import { mockProjects } from '@/app/features/projects/utils/mockData';
+import { mockProjects } from '@/data/mockProjects';
 import { ProjectListPresentation } from "./ProjectListPresentation";
 
 

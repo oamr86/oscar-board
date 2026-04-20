@@ -1,3 +1,4 @@
+// Este archivo fue movido desde features/task/store/useTaskStore.ts
 import { create } from 'zustand';
 import { Task, mockTasks } from '@/data/mockTasks';
 

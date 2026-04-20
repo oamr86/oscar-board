@@ -1,11 +1,12 @@
-//OAMR -  Este componente se ejecuta en el servidor por defecto (Server Component) porque no tiene 'use client'.
+"use client";
+//OAMR -  Este componente se ejecuta en el cliente porque usa Zustand y hooks de estado.
 import React, { useState, useEffect } from 'react';
+import { useThemeState } from '@/app/context/theme-context';
 import Skeleton from '@mui/material/Skeleton';
-import { useTaskStore } from '@/app/features/task/store';
-import { TASK_STATUSES } from '@/app/features/task/utils/mockData';
-import { TaskCard } from '@/app/features/task/components/TaskCard';
-import { mockTasks } from '@/app/features/task/utils/mockData';
-import { mockProjects } from '@/app/features/projects/utils/mockData';
+import { useTaskStore } from '@/app/store/useTaskStore';
+import { TASK_STATUSES, mockTasks } from '@/data/mockTasks';
+import { mockProjects } from '@/data/mockProjects';
+import { TaskCard } from '@/app/components/organisms/tickets/TaskCard';
 
 const columns = [
   { key: TASK_STATUSES.TODO, label: 'To do' },
@@ -56,6 +57,8 @@ export default function KanbanTasks() {
     ? tasks
     : tasks.filter((t) => t.project === mockProjects.find((p) => p.id === selectedProject)?.name);
 
+  const mode = useThemeState();
+  const isDark = mode === 'dark';
   return (
     <div>
       <div style={{ marginBottom: 16 }}>
@@ -75,8 +78,18 @@ export default function KanbanTasks() {
       </div>
       <div style={{ display: 'flex', gap: 24, minHeight: 400 }}>
         {columns.map((col) => (
-          <div key={col.key} style={{ flex: 1, background: '#f5faff', borderRadius: 8, padding: 16, border: '1px solid #1976d2', minHeight: 300 }}>
-            <h3 style={{ textAlign: 'center', color: '#1976d2' }}>{col.label}</h3>
+          <div
+            key={col.key}
+            style={{
+              flex: 1,
+              background: isDark ? '#23232b' : '#f5faff',
+              borderRadius: 8,
+              padding: 16,
+              border: isDark ? '1px solid #a78bfa' : '1px solid #1976d2',
+              minHeight: 300,
+            }}
+          >
+            <h3 style={{ textAlign: 'center', color: isDark ? '#a78bfa' : '#1976d2' }}>{col.label}</h3>
             {loading ? (
               Array.from({ length: 3 }).map((_, idx) => (
                 <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24, padding: 8 }}>

@@ -31,4 +31,27 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Optimización de componentes y rendimiento
+
+### Uso de React.memo
+
+Se utiliza `React.memo` en los siguientes componentes de presentación:
+
+- **TaskListPresentation** (`features/task/components/TaskListPresentation.tsx`)
+- **ProjectListPresentation** (`features/projects/components/ProjectListPresentation.tsx`)
+
+**Justificación:**
+Ambos componentes renderizan listas de elementos (tareas y proyectos) y reciben sus datos y handlers por props. Al envolverlos en `React.memo`, evitamos renders innecesarios cuando las props no cambian, optimizando el rendimiento en listas grandes o cuando el estado global cambia frecuentemente.
+
+### Uso de useMemo
+
+En `TaskListContainer` (`features/task/components/TaskListContainer.tsx`) se utiliza `useMemo` para calcular la lista filtrada de tareas (tickets). Esto evita que la función de filtrado se ejecute en cada render si las dependencias no han cambiado, mejorando la eficiencia cuando la lista de tareas es grande o los filtros complejos.
+
+### Uso de useCallback
+
+En `TaskListContainer` se usan `useCallback` para los handlers `handleRemove` y `handleToggle`, que se pasan como props a `TaskListPresentation` (un componente memoizado). Esto asegura que las referencias de los handlers no cambien entre renders, permitiendo que `React.memo` funcione correctamente y evitando renders innecesarios de los hijos.
+
+### Uso de React.lazy y Suspense
+
+En la página de proyectos (`app/projects/page.tsx`), el componente `ProjectListContainer` se carga de forma diferida usando `React.lazy` y `Suspense`. Esto permite dividir el código y cargar componentes pesados sólo cuando son necesarios, mejorando el tiempo de carga inicial de la aplicación.

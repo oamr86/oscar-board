@@ -1,6 +1,4 @@
-// This file is being moved to a new location
-
-
+// This file was movido desde shared/ui/atoms/Button.tsx
 
 /**
  * Props para el componente Button.

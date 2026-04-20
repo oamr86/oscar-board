@@ -1,10 +1,12 @@
 //OAMR -  'use client' es necesario porque este componente usa Suspense y simula carga asíncrona con throw new Promise, lo que requiere ejecución en el cliente.
 "use client";
-import React from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { TaskListPresentation } from './TaskListPresentation';
-import { TASK_STATUSES, TASK_PRIORITIES } from '@/app/features/task/utils/mockData';
+import { TASK_STATUSES, TASK_PRIORITIES } from '@/data/mockTasks';
 import { useForm } from '@/app/features/task/hooks';
 import { useTaskStore } from '@/app/features/task/store';
+import { SearchBar } from '@/app/shared/ui/molecules/SearchBar';
+import { useDebounce, useFilters, useLocalStorage } from '@/app/shared/hooks';
 
 const initialTasks = [
   {
@@ -39,8 +41,22 @@ const validate = (values: { title: string; description: string; project: string 
 const TaskListContainer: React.FC = () => {
   const tasks = useTaskStore((state) => state.tasks);
   const addTask = useTaskStore((state) => state.addTask);
-  const deleteTask = useTaskStore((state) => state.deleteTask);
-  const markComplete = useTaskStore((state) => state.markComplete);
+  const deleteTaskStore = useTaskStore((state) => state.deleteTask);
+  const markCompleteStore = useTaskStore((state) => state.markComplete);
+
+  // Handlers memoizados
+  const handleRemove = useCallback((id: string) => {
+    deleteTaskStore(id);
+  }, [deleteTaskStore]);
+
+  const handleToggle = useCallback((id: string) => {
+    markCompleteStore(id);
+  }, [markCompleteStore]);
+
+  // Estado de búsqueda y filtros
+  const [search, setSearch] = useLocalStorage<string>('task-search', '');
+  const debouncedSearch = useDebounce(search, 300);
+  const { filters, setFilter, clearFilters, applyFilters } = useFilters({ status: '', priority: '', project: '' });
 
   const {
     values,
@@ -71,6 +87,7 @@ const TaskListContainer: React.FC = () => {
         priority: vals.priority,
         project: vals.project,
         createdAt: new Date().toISOString().slice(0, 10),
+        completed: false,
       };
       addTask(newTask);
       setValues({
@@ -96,8 +113,38 @@ const TaskListContainer: React.FC = () => {
 
 
 
+
+  // Filtrado de tareas con useMemo
+  const filteredTasks = useMemo(() => {
+    let result = tasks;
+    if (debouncedSearch) {
+      result = result.filter(task =>
+        task.title.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        task.description.toLowerCase().includes(debouncedSearch.toLowerCase())
+      );
+    }
+    result = applyFilters(result);
+    return result;
+  }, [tasks, debouncedSearch, filters]);
+
   return (
     <section>
+      <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 16 }}>
+        <SearchBar value={search} onChange={setSearch} placeholder="Buscar tarea..." />
+        <select value={filters.status} onChange={e => setFilter('status', e.target.value)}>
+          <option value="">Todas</option>
+          <option value={TASK_STATUSES.TODO}>Pendiente</option>
+          <option value={TASK_STATUSES.IN_PROGRESS}>En progreso</option>
+          <option value={TASK_STATUSES.DONE}>Hecha</option>
+        </select>
+        <select value={filters.priority} onChange={e => setFilter('priority', e.target.value)}>
+          <option value="">Todas</option>
+          <option value={TASK_PRIORITIES.LOW}>Baja</option>
+          <option value={TASK_PRIORITIES.MEDIUM}>Media</option>
+          <option value={TASK_PRIORITIES.HIGH}>Alta</option>
+        </select>
+        <button type="button" onClick={clearFilters}>Limpiar filtros</button>
+      </div>
       <form onSubmit={handleSubmit} style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 400 }}>
         <input
           name="title"
@@ -132,7 +179,7 @@ const TaskListContainer: React.FC = () => {
           {isSubmitting ? 'Agregando...' : 'Agregar tarea'}
         </button>
       </form>
-      <TaskListPresentation tasks={tasks} onRemove={deleteTask} onToggle={markComplete} />
+      <TaskListPresentation tasks={filteredTasks} onRemove={handleRemove} onToggle={handleToggle} />
     </section>
   );
 };

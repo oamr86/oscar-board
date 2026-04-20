@@ -1,7 +1,8 @@
 
 
+import { memo } from 'react';
 import { TaskCard } from './TaskCard';
-import type { Task } from '@/app/features/task/utils/mockData';
+import type { Task } from '@/data/mockTasks';
 
 interface TaskListPresentationProps {
   tasks: Task[];
@@ -9,7 +10,7 @@ interface TaskListPresentationProps {
   onToggle?: (id: string) => void;
 }
 
-export const TaskListPresentation: React.FC<TaskListPresentationProps> = ({ tasks, onRemove, onToggle }) => (
+const TaskListPresentationComponent: React.FC<TaskListPresentationProps> = ({ tasks, onRemove, onToggle }) => (
   <div style={{
     display: 'flex',
     flexDirection: 'column',
@@ -23,7 +24,9 @@ export const TaskListPresentation: React.FC<TaskListPresentationProps> = ({ task
     boxSizing: 'border-box',
   }}>
     {tasks.map((task: Task) => (
-      <TaskCard key={task.id} task={task} onRemove={onRemove} onToggle={onToggle} />
+      <TaskCard key={task.id} task={task} onRemove={onRemove} />
     ))}
   </div>
 );
+
+export const TaskListPresentation = memo(TaskListPresentationComponent);

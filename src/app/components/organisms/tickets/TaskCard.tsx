@@ -1,9 +1,10 @@
-
+// Este archivo fue movido desde features/task/components/TaskCard.tsx
 import React from 'react';
+// ...importaciones necesarias
+
 import { Card } from '@/app/components/molecules/Card';
 import { Badge } from '@/app/components/atoms/Badge';
 import { Task, TASK_STATUSES } from '@/data/mockTasks';
-
 
 interface TaskCardProps {
   task: Task;
@@ -11,9 +12,7 @@ interface TaskCardProps {
   onStatusChange?: (id: string, nextStatus: string) => void;
 }
 
-
 export const TaskCard: React.FC<TaskCardProps> = ({ task, onRemove, onStatusChange }) => {
-  //OAMR -  Determinar el siguiente estado y el texto del botón
   let nextStatus: string | null = null;
   let actionLabel = '';
   if (task.status === TASK_STATUSES.TODO) {
@@ -41,16 +40,9 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onRemove, onStatusChan
         </Badge>
       </div>
       <div style={{ margin: '8px 0' }}>{task.description}</div>
-      <div style={{ fontSize: 13, color: '#555' }}>Prioridad: {task.priority}</div>
-      <div style={{ fontSize: 13, color: '#555' }}>Proyecto: {task.project}</div>
-      <div style={{ fontSize: 12, color: '#888' }}>
-        <span>Creado: {task.createdAt}</span>
-      </div>
-      <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
-        {onStatusChange && nextStatus && (
-          <button onClick={() => onStatusChange(task.id, nextStatus)}>
-            {actionLabel}
-          </button>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+        {nextStatus && onStatusChange && (
+          <button onClick={() => onStatusChange(task.id, nextStatus)}>{actionLabel}</button>
         )}
         {onRemove && (
           <button onClick={() => onRemove(task.id)} style={{ color: 'red' }}>
