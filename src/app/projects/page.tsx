@@ -1,5 +1,15 @@
 import React, { Suspense } from 'react';
-const ProjectListContainer = React.lazy(() => import('@/app/features/projects/components/ProjectListContainer'));
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Proyectos | TaskFlow',
+  description: 'Gestiona tus proyectos',
+  openGraph: {
+    title: 'Proyectos | TaskFlow',
+    description: 'Gestiona tus proyectos',
+  },
+};
+const ProjectListContainer = React.lazy(() => import('@/app/components/organisms/projects/ProjectListContainer'));
 
 export default function ProjectsPage() {
   return (

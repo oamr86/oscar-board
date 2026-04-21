@@ -17,4 +17,26 @@ describe('TaskListPresentation', () => {
     expect(screen.getByText('Tarea 1')).toBeInTheDocument();
     expect(screen.getByText('Tarea 2')).toBeInTheDocument();
   });
+
+  it('llama a onRemove cuando se hace click en Eliminar', () => {
+    const handleRemove = vi.fn();
+    render(
+      <ThemeProvider>
+        <TaskListPresentation tasks={tasks} onRemove={handleRemove} />
+      </ThemeProvider>
+    );
+    const deleteButtons = screen.getAllByText('Eliminar');
+    deleteButtons[0].click();
+    expect(handleRemove).toHaveBeenCalledWith('1');
+  });
+
+  it('renderiza correctamente cuando la lista está vacía', () => {
+    render(
+      <ThemeProvider>
+        <TaskListPresentation tasks={[]} />
+      </ThemeProvider>
+    );
+    expect(screen.queryByText('Tarea 1')).not.toBeInTheDocument();
+    expect(screen.queryByText('Tarea 2')).not.toBeInTheDocument();
+  });
 });

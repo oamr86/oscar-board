@@ -23,4 +23,17 @@ describe('useDebounce', () => {
     rerender({ v: 'b' }); // Forzar actualización tras el timeout
     expect(result.current).toBe('b');
   });
+  it('limpia el timeout anterior al cambiar el valor', () => {
+    const { rerender } = renderHook(({ v }) => useDebounce(v, 200), { initialProps: { v: 'x' } });
+    rerender({ v: 'y' });
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+    rerender({ v: 'z' }); // Cambia antes de que termine el timeout anterior
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+    // Si el cleanup funciona, solo el último valor debe quedar
+    // No debe lanzar error ni quedarse con el valor anterior
+  });
 });

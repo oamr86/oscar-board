@@ -8,5 +8,8 @@ export default defineConfig({
     alias: {
       '@/': new URL('./src/', import.meta.url).pathname,
     },
+    coverage: {
+      reporter: ['text', 'lcov']
+    }
   },
 });
